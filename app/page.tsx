@@ -11,10 +11,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 export default async function Home() {
-	/* if ((await verifySession())?.isAuth) {
-		redirect('/dashboard')
-	} */
 	const session = await verifySession()
+
 	if (session?.isAuth) {
 		redirect('/dashboard')
 	}
@@ -31,13 +29,13 @@ export default async function Home() {
 			instructor: {
 				name: users.name
 			},
+			enrollmentCount: count(enrollments.id).as("enrollmentCount"), // Count enrollments
 		}).from(courses)
 		.where(eq(courses.published, true))
 		.leftJoin(users, eq(courses.instructorId, users.id))
-		.leftJoin(enrollments, eq(courses.enrollmentsId, enrollments.id))
-		.limit(6) as NewCourse
-
-	console.log("all courses: ", allCourses)
+		.leftJoin(enrollments, eq(enrollments.courseId, courses.id))
+		.groupBy(courses.id, users.name)
+		.limit(6) as NewCourse[]
 
 	return (
 		<>
@@ -87,6 +85,31 @@ export default async function Home() {
 							<Slider />
 						</div>
 					))}
+				</div>
+			</div>
+
+			<div className="mt-10">
+				<div className="text-center pb-10">
+					<h2 className="text-6xl">All courses</h2>
+					<p className="text-lg">Enroll in course and start upgrading your skills.</p>
+				</div>
+				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+					{allCourses.map((course) => {
+						return (
+							<Link href={`/course/${course.id}`} key={course.id} className="border border-zinc-100/10 p-2 space-y-2 rounded-xl hover-animation hover:shadow-orange-400 hover:shadow-sm">
+								<div className="relative w-full h-40">
+									<Image
+										src={course.imageUrl ?? ""}
+										alt="image"
+										fill
+										className="object-cover rounded-md"
+									/>
+								</div>
+								<h1 className="text-xl">{course.title}</h1>
+								<h1 className="text-zinc-200/60">{course.description}</h1>
+							</Link>
+						)
+					})}
 				</div>
 			</div>
 		</>
