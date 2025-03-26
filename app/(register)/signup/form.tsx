@@ -11,7 +11,6 @@ import { toast } from 'sonner'
 
 export const SignupForm = () => {
 	const [state, action, isPending] = useActionState(signup, undefined)
-	console.log(isPending)
 
 	const nameRef = useRef<HTMLInputElement>(null)
 	const emailRef = useRef<HTMLInputElement>(null)

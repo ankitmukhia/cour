@@ -14,6 +14,8 @@ export default async function DashboardPage() {
 	return (
 		<div className="mt-6">
 			<Appbar />
+
+			{/* show all the course your have enrolled in */}
 		</div>
 	)
 }

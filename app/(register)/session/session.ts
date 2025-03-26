@@ -55,7 +55,7 @@ export const verifySession = async () => {
 	}
 
 	return {
-		isAuth: true, userId: Number(session.userId)
+		isAuth: true, userId: String(session.userId)
 	}
 }
 

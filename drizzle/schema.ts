@@ -18,7 +18,7 @@ export const enrollments = pgTable('enrollments', {
 	createdAt: timestamp('createdAt').defaultNow(),
 	updatedAt: timestamp('updatedAt').defaultNow(),
 	userId: uuid('userId').references(() => users.id),
-	courseId: uuid('courseId').references(() => users.id),
+	courseId: uuid('courseId').references(() => courses.id),
 }, (table) => ({
 	// ensures user cant enroll in same course multiple times
 	uniqueUserAndCourse: uniqueIndex('unique_user_course').on(table.userId, table.courseId)

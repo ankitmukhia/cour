@@ -1,11 +1,55 @@
 'use client'
 
-import Image from 'next/image'
+import { useState, useEffect } from 'react'
+import { ArrowLeftIcon } from '@heroicons/react/24/solid'
 import { NewCourse } from '@/drizzle/schema'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
+import Image from 'next/image'
+import Link from 'next/link'
 
-export const Course = (course: NewCourse) => {
+export const Course = ({ course, enrollment }: { course: NewCourse, enrollment: boolean }) => {
+	const [enrollingState, setEnrollingState] = useState<boolean>(false)
+	const [error, setError] = useState("")
+	const router = useRouter()
+
+	const handleEnrollment = async () => {
+		setEnrollingState(true)
+		try {
+			const res = await fetch('/api/enrollments', {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({ courseId: course.id }),
+			})
+
+			if (!res.ok) {
+				const data = await res.json()
+				throw new Error(data.error ?? "fail to enroll in course")
+			}
+
+			router.push('/dashboard')
+			router.refresh()
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Something went wrong!")
+		} finally {
+			setEnrollingState(false)
+		}
+	}
+
+	useEffect(() => {
+		if (error) {
+			toast(`${error}`)
+		}
+	}, [error])
+
 	return (
-		<div className="mt-6">
+		<div className="mt-6 space-y-4">
+			<div onClick={() => router.back()} className="group inline-block p-1 rounded-full bg-orange-500 cursor-pointer hover:bg-orange-500/80">
+				<ArrowLeftIcon className="h-4 w-4 transform transaction-all duration-100 ease-in-out group-hover:scale-110" />
+			</div>
+
 			<div className="relative w-full aspect-[16/9] overflow-hidden w-full h-60">
 				<Image
 					src={course.imageUrl ?? ""}
@@ -23,11 +67,23 @@ export const Course = (course: NewCourse) => {
 					{course.description}
 				</p>
 
-				<button className="bg-orange-500 px-6 py-3">
-					Enroll for Free
-				</button>
+				{enrollment ? (
+					<button onClick={() => router.push('/dashboard')} className="bg-orange-500 px-6 py-3">
+						Dashboard
+					</button>
+				) : (
+					<button onClick={handleEnrollment} className="bg-orange-500 px-6 py-3">
+						{enrollingState ? "Wait Enrolling..." : "Enroll for Free"}
+					</button>
+				)}
 				{/* @ts-ignore */}
-				<p>{course?.enrollmentCount <= 0 ? "No Enrollments yet." : "already enrolled"} </p>
+				<p className="text-xs">{course?.enrollmentCount <= 0 ? "No Enrollments yet." : `${course?.enrollmentCount} already enrolled.`} </p>
+			</div>
+
+			<div className="p-2">
+				<h1 className="text-xl">Content Preview</h1>
+				
+				
 			</div>
 		</div>
 	)

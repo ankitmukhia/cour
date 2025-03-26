@@ -27,7 +27,7 @@ export const WorkingStep: WorkingStepType[] = [
 export const GuestUser: GuestCredentialsTypes[] = [
 	{
 		id: 1,
-		title: "User Guest Signup",
+		title: "User Guest Register",
 		credentials: {
 			name: "user",
 			email: "user@gmail.com",
@@ -36,7 +36,7 @@ export const GuestUser: GuestCredentialsTypes[] = [
 	},
 	{
 		id: 2,
-		title: "Admin Guest Signup",
+		title: "Admin Guest Register",
 		credentials: {
 			name: "admin",
 			email: "admin@gmail.com",
@@ -45,7 +45,7 @@ export const GuestUser: GuestCredentialsTypes[] = [
 	},
 	{
 		id: 3,
-		title: "Instructor Guest Signup",
+		title: "Instructor Guest Register",
 		credentials: {
 			name: "instructor",
 			email: "instructor@gmail.com",

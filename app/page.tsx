@@ -13,10 +13,6 @@ import Link from 'next/link'
 export default async function Home() {
 	const session = await verifySession()
 
-	if (session?.isAuth) {
-		redirect('/dashboard')
-	}
-
 	const allCourses = await db
 		.select({
 			id: courses.id,
@@ -42,11 +38,19 @@ export default async function Home() {
 			<div className="flex items-center justify-between">
 				<Logo className="text-[2.5rem]" />
 				<div className="flex items-center gap-4">
-					<Link href="/signup">
-						<HoverButton>
-							Register
-						</HoverButton>
-					</Link>
+					{session?.isAuth ? (
+						<Link href="/dashboard">
+							<HoverButton>
+								Dashboard
+							</HoverButton>
+						</Link>
+					) : (
+						<Link href="/signup">
+							<HoverButton>
+								Register
+							</HoverButton>
+						</Link>
+					)}
 				</div>
 			</div>
 
@@ -58,11 +62,19 @@ export default async function Home() {
 					</h1>
 
 					<div className="mt-10">
-						<Link href="/signup">
-							<HoverButton>
-								Register for free
-							</HoverButton>
-						</Link>
+						{session?.isAuth ? (
+							<Link href="/dashboard">
+								<HoverButton>
+									Go to Dashboard
+								</HoverButton>
+							</Link>
+						) : (
+							<Link href="/signup">
+								<HoverButton>
+									Register for free
+								</HoverButton>
+							</Link>
+						)}
 					</div>
 
 				</div>
@@ -94,25 +106,22 @@ export default async function Home() {
 					<p className="text-lg">Enroll in course and start upgrading your skills.</p>
 				</div>
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-					{allCourses.map((course) => {
-						return (
-							<Link href={`/course/${course.id}`} key={course.id} className="border border-zinc-100/10 p-2 space-y-2 rounded-xl hover-animation hover:shadow-orange-400 hover:shadow-sm">
-								<div className="relative w-full h-40">
-									<Image
-										src={course.imageUrl ?? ""}
-										alt="image"
-										fill
-										className="object-cover rounded-md"
-									/>
-								</div>
-								<h1 className="text-xl">{course.title}</h1>
-								<h1 className="text-zinc-200/60">{course.description}</h1>
-							</Link>
-						)
-					})}
+					{allCourses.map((course) => (
+						<Link href={`/course/${course.id}`} key={course.id} className="border border-zinc-100/10 p-2 space-y-2 rounded-xl hover-animation hover:shadow-orange-400 hover:shadow-sm">
+							<div className="relative w-full h-40">
+								<Image
+									src={course.imageUrl ?? ""}
+									alt="image"
+									fill
+									className="object-cover rounded-md"
+								/>
+							</div>
+							<h1 className="text-xl">{course.title}</h1>
+							<h1 className="text-zinc-200/60">{course.description}</h1>
+						</Link>
+					))}
 				</div>
 			</div>
 		</>
 	)
 }
-
