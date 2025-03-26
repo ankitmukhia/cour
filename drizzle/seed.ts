@@ -1,5 +1,6 @@
+import { users, NewUser, courses, NewCourse, NewSection } from '@/drizzle/schema';
 import { db } from '@/drizzle/db';
-import { users, NewUser, courses, NewCourse } from '@/drizzle/schema';
+import { CourseBatch, SectionBatch } from '@/lib/constants'
 import bcrypt from 'bcrypt'
 
 export const insertUser = async (user: NewUser) => {
@@ -8,6 +9,10 @@ export const insertUser = async (user: NewUser) => {
 
 export const insertCours = async (course: NewCourse[]) => {
 	return db.insert(courses).values(course).returning()
+}
+
+export const insertSection = async (section: NewSection[]) => {
+	return db.insert(courses).values(section).onConflictDoUpdate({ target: courses.id, set: {} })
 }
 
 async function main() {
@@ -41,59 +46,12 @@ async function main() {
 	const admin = await insertUser(newAdmin)
 	console.log('Successfully seeded admin table: ', admin)
 
-	const courses: NewCourse[] = [
-		{
-			title: "Mastering React",
-			description: "Deep dive into React, including hooks, state management, and performance optimization.",
-			price: 79.99,
-			imageUrl: "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2",
-			published: true,
-			instructorId: instructor[0].id
-		},
-		{
-			title: "Full-Stack JavaScript",
-			description: "Learn how to build full-stack applications using Node.js, Express, and MongoDB.",
-			price: 99.99,
-			imageUrl: "https://images.unsplash.com/photo-1526374870839-e155464bb9df",
-			published: true,
-			instructorId: instructor[0].id
-		},
-		{
-			title: "Advanced TypeScript",
-			description: "Master TypeScript with advanced types, generics, and best practices for scalable applications.",
-			price: 59.99,
-			imageUrl: "https://images.unsplash.com/photo-1547658719-da2b51169166",
-			published: false,
-			instructorId: instructor[0].id
-		},
-		{
-			title: "UI/UX Design Fundamentals",
-			description: "Understand the principles of great design and how to create user-friendly interfaces.",
-			price: 39.99,
-			imageUrl: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f",
-			published: true,
-			instructorId: instructor[0].id
-		},
-		{
-			title: "Next.js for Beginners",
-			description: "Learn how to build fast and scalable web applications using Next.js.",
-			price: 69.99,
-			imageUrl: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe",
-			published: true,
-			instructorId: instructor[0].id
-		},
-		{
-			title: "Database Design & Optimization",
-			description: "Gain expertise in designing efficient databases using SQL and NoSQL technologies.",
-			price: 89.99,
-			imageUrl: "https://images.unsplash.com/photo-1542831371-d531d36971e6",
-			published: false,
-			instructorId: instructor[0].id
-		}
-	];
-
-	const course = await insertCours(courses)
+	const course = await insertCours(CourseBatch(instructor))
 	console.log('Successfully seeded courses table: ', course)
+
+
+	// need to pass specific cours id to SectionBatch ot correctly update the exect section of the course
+	// const section = await insertSection(SectionBatch())
 
 	process.exit()
 }

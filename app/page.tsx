@@ -6,7 +6,6 @@ import { WorkingStepType } from '@/types/index'
 import { db } from '@/drizzle/db'
 import { courses, users, enrollments, NewCourse } from '@/drizzle/schema'
 import { eq, count } from 'drizzle-orm'
-import { redirect } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 
