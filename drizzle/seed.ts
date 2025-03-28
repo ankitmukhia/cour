@@ -1,7 +1,6 @@
-import { users, NewUser, courses, NewCourse, NewSection } from '@/drizzle/schema';
+import { users, NewUser, courses, NewCourse, section as sections, NewSection, lesson as lessons, NewLesson } from '@/drizzle/schema';
+import { CourseBatch, SectionBatch, GuestBatch, LessonBatch } from '@/lib/constants'
 import { db } from '@/drizzle/db';
-import { CourseBatch, SectionBatch, GuestBatch } from '@/lib/constants'
-import bcrypt from 'bcrypt'
 
 export const insertUser = async (user: NewUser[]) => {
 	return db.insert(users).values(user).returning()
@@ -12,7 +11,11 @@ export const insertCours = async (course: NewCourse[]) => {
 }
 
 export const insertSection = async (section: NewSection[]) => {
-	return db.insert(courses).values(section).onConflictDoUpdate({ target: courses.id, set: {} })
+	return db.insert(sections).values(section).returning()
+}
+
+export const insertLesson = async (lesson: NewLesson[]) => {
+	return db.insert(lessons).values(lesson).returning()
 }
 
 async function main() {
@@ -24,7 +27,11 @@ async function main() {
 	console.log('Successfully seeded courses table: ', course)
 
 	// need to pass specific cours id to SectionBatch ot correctly update the exect section of the course
-	// const section = await insertSection(SectionBatch())
+	const section = await insertSection(SectionBatch(course[0]))
+	console.log('Successfully seeded courses section: ', section)
+
+	const lesson = await insertLesson(LessonBatch(section))
+	console.log('Successfully seed courses lesson: ', lesson)
 
 	process.exit()
 }

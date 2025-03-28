@@ -1,8 +1,9 @@
-import { WorkingStepType, GuestCredentialsTypes } from '@/types/index'
+import { WorkingStepType } from '@/types/index'
 import { CursorClickIcon } from '@/components/ui/cursorclick-icon'
 import { PartyPopperIcon } from '@/components/ui/partypopper-icon'
 import { WorkflowIcon } from '@/components/ui/workflow-icon'
-import { NewCourse, NewUser, NewSection } from '@/drizzle/schema'
+import { NewCourse, NewUser, NewSection, NewLesson } from '@/drizzle/schema'
+import { v4 as uuid } from 'uuid'
 import bcrypt from 'bcrypt'
 
 export const WorkingStep: WorkingStepType[] = [
@@ -28,21 +29,21 @@ export const WorkingStep: WorkingStepType[] = [
 
 export const GuestBatch: NewUser[] = [
 	{
-		id: "550e8400-e29b-41d4-a716-446655440000",
+		id: uuid(), 
 		name: 'user',
 		email: 'user@gmail.com',
 		password: await bcrypt.hash('user123', 10),
 		role: 'user',
 	},
 	{
-		id: "123e4567-e89b-12d3-a456-426614174000",
+		id: uuid(),
 		name: 'instructor',
 		email: 'instructor@gmail.com',
 		password: await bcrypt.hash('instructor123', 10),
 		role: 'instructor',
 	},
 	{
-		id: "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+		id: uuid(),
 		name: 'admin',
 		email: 'admin@gmail.com',
 		password: await bcrypt.hash('admin123', 10),
@@ -53,7 +54,7 @@ export const GuestBatch: NewUser[] = [
 export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 	return [
 		{
-			id: "9f1d7b32-4a14-4d5b-95bb-df3e5f9e1b7c",
+			id: uuid(),
 			title: "Mastering React",
 			description: "Deep dive into React, including hooks, state management, and performance optimization.",
 			price: 79.99,
@@ -62,7 +63,7 @@ export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 			instructorId: instructor.id
 		},
 		{
-			id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+			id: uuid(),
 			title: "Full-Stack JavaScript",
 			description: "Learn how to build full-stack applications using Node.js, Express, and MongoDB.",
 			price: 99.99,
@@ -71,7 +72,7 @@ export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 			instructorId: instructor.id
 		},
 		{
-			id: "6d8f3b5a-4e1b-4cd1-92b5-3e2a5a3c5678",
+			id: uuid(),
 			title: "Advanced TypeScript",
 			description: "Master TypeScript with advanced types, generics, and best practices for scalable applications.",
 			price: 59.99,
@@ -80,7 +81,7 @@ export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 			instructorId: instructor.id
 		},
 		{
-			id: "d7949f14-2b23-4b2f-8fbd-4d5c2a38b13f",
+			id: uuid(),
 			title: "UI/UX Design Fundamentals",
 			description: "Understand the principles of great design and how to create user-friendly interfaces.",
 			price: 39.99,
@@ -89,7 +90,7 @@ export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 			instructorId: instructor.id
 		},
 		{
-			id: "e5f2c4b8-7a61-4c9d-9e43-317e2589cbb9",
+			id: uuid(),
 			title: "Next.js for Beginners",
 			description: "Learn how to build fast and scalable web applications using Next.js.",
 			price: 69.99,
@@ -98,7 +99,7 @@ export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 			instructorId: instructor.id
 		},
 		{
-			id: "a7b88c2e-6d47-4031-b2b7-98d5f37cfe74",
+			id: uuid(),
 			title: "Database Design & Optimization",
 			description: "Gain expertise in designing efficient databases using SQL and NoSQL technologies.",
 			price: 89.99,
@@ -109,22 +110,85 @@ export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 	];
 }
 
-export const SectionBatch = (): NewSection[] => {
+export const SectionBatch = (course: NewCourse): NewSection[] => {
 	return [
 		{
-			id: "cls1234567890",
+			id: uuid(),
 			title: "Introduction to React and JSX",
-			order: 1
+			order: 1,
+			courseId: course.id
 		},
 		{
-			id: "cls1234567891",
+			id: uuid(),
 			title: "State Management with Hooks",
-			order: 2
+			order: 2,
+			courseId: course.id
 		},
 		{
-			id: "cls1234567892",
+			id: uuid(),
 			title: "Performance Optimization Techniques",
-			order: 3
+			order: 3,
+			courseId: course.id
 		}
 	]
 }
+
+// now for each seaction, we need to have bunch of lesson, and that lesson ides will come as props,
+export const LessonBatch = (sections: NewSection[]): NewLesson[] => {
+	return [
+		// Lessons for "Introduction to React and JSX"
+		{
+			id: uuid(),
+			title: "What is React and Why Use It?",
+			order: 1,
+			content: "An overview of React, its advantages, and how it differs from traditional web development.",
+			videoUrl: "https://example.com/react-intro",
+			sectionId: sections[0].id
+		},
+		{
+			id: uuid(),
+			title: "JSX and Component Basics",
+			order: 2,
+			content: "Understanding JSX syntax and the basics of React components.",
+			videoUrl: "https://example.com/jsx-components",
+			sectionId: sections[0].id
+		},
+
+		// Lessons for "State Management with Hooks"
+		{
+			id: uuid(),
+			title: "Understanding useState Hook",
+			order: 1,
+			content: "A deep dive into useState and how to manage local state in functional components.",
+			videoUrl: "https://example.com/usestate-hook",
+			sectionId: sections[1].id
+		},
+		{
+			id: uuid(),
+			title: "Using useEffect for Side Effects",
+			order: 2,
+			content: "How to use useEffect for handling side effects like data fetching and subscriptions.",
+			videoUrl: "https://example.com/useeffect-hook",
+			sectionId: sections[1].id
+		},
+
+		// Lessons for "Performance Optimization Techniques"
+		{
+			id: uuid(),
+			title: "React.memo and useCallback",
+			order: 1,
+			content: "Using React.memo and useCallback to optimize performance by preventing unnecessary re-renders.",
+			videoUrl: "https://example.com/react-memo-usecallback",
+			sectionId: sections[2].id
+		},
+		{
+			id: uuid(),
+			title: "Lazy Loading and Code Splitting",
+			order: 2,
+			content: "Understanding how to improve performance with lazy loading and dynamic imports.",
+			videoUrl: "https://example.com/lazy-loading",
+			sectionId: sections[2].id
+		}
+	];
+};
+

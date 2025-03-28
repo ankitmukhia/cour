@@ -98,3 +98,4 @@ export const lessonRelations = relations(lesson, ({ one }) => ({
 export type NewUser = InferInsertModel<typeof users>
 export type NewCourse = InferInsertModel<typeof courses>
 export type NewSection = InferInsertModel<typeof section>
+export type NewLesson = InferInsertModel<typeof lesson>
