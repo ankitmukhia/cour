@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
 		}
 
 		// 3. then enroll the user, to the course that is being requested
+		console.log("courseId api: ", courseId)
 		const enrollUser = await db.insert(enrollments).values({
 			userId: session.userId,
 			courseId: courseId

@@ -1,14 +1,16 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowLeftIcon } from '@heroicons/react/24/solid'
-import { NewCourse, NewSection } from '@/drizzle/schema'
+import { ArrowLeftIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/solid'
 import { useRouter } from 'next/navigation'
+import { CourseWithSection } from '@/types'
 import { toast } from 'sonner'
 import Image from 'next/image'
+import clsx from 'clsx'
 
-export const Course = ({ course, enrollment }: { course: NewCourse, enrollment: boolean }) => {
+export const Course = ({ course, enrollment }: { course: CourseWithSection, enrollment: boolean }) => {
 	const [enrollingState, setEnrollingState] = useState<boolean>(false)
+	const [expand, setExpand] = useState<number | null>(null)
 	const [error, setError] = useState("")
 	const router = useRouter()
 
@@ -42,6 +44,10 @@ export const Course = ({ course, enrollment }: { course: NewCourse, enrollment: 
 			toast(`${error}`)
 		}
 	}, [error])
+
+	const handleExpand = (index: number) => {
+		setExpand(expand === index ? null : index)
+	}
 
 	return (
 		<div className="mt-6 space-y-4">
@@ -83,12 +89,41 @@ export const Course = ({ course, enrollment }: { course: NewCourse, enrollment: 
 				<h1 className="text-2xl text-orange-500">Content Preview</h1>
 
 				<div className="mt-4 space-y-4">
-					{course.sections.map((section) => {
-						return (
-						<div key={section.id} className="py-3 border-b border-zinc-500/20">
-							<h1>{section.title}</h1>
+					{course.sections.map((section, _idx) => (
+						<div key={section.id} className={clsx(`py-3 border-b border-zinc-500/20`, {
+							"border-none": _idx === course.sections.length - 1
+						})}>
+							<div className="flex items-center justify-between">
+								<h1>{section.title}</h1>
+
+								<button onClick={() => handleExpand(_idx)}>
+									{expand === _idx ? (
+										<ChevronUpIcon className="h-4 w-4" />
+									) : (
+										<ChevronDownIcon className="h-4 w-4" />
+									)}
+								</button>
+
+							</div>
+
+							{expand === _idx && (
+								<div className="mt-2 space-y-2 px-1 text-sm">
+									{section.lessons.map((lesson, _idx) => (
+										<div key={lesson.id} className="flex items-center space-x-2 relative">
+											{_idx !== 0 && (
+												<div className="absolute left-[3px] top-[-20px] h-8 w-[2px] bg-orange-400" />
+											)}
+											<div className="bg-orange-400 h-2 w-2 rounded-full" />
+											<div>
+												<h1>{lesson.title}</h1>
+											</div>
+										</div>
+									))}
+								</div>
+							)}
+
 						</div>
-					)})}
+					))}
 				</div>
 			</div>
 		</div>

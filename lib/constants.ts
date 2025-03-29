@@ -4,24 +4,23 @@ import { PartyPopperIcon } from '@/components/ui/partypopper-icon'
 import { WorkflowIcon } from '@/components/ui/workflow-icon'
 import { NewCourse, NewUser, NewSection, NewLesson } from '@/drizzle/schema'
 import { v4 as uuid } from 'uuid'
-import bcrypt from 'bcrypt'
 
 export const WorkingStep: WorkingStepType[] = [
 	{
 		id: 1,
-		icon: <WorkflowIcon />,
+		icon: WorkflowIcon,
 		name: "Seamless Registration",
 		description: "Sign up effortlessly with our intuitive and hassle-free registration process.",
 	},
 	{
 		id: 2,
-		icon: <CursorClickIcon />,
+		icon: CursorClickIcon,
 		name: "Explore & Enroll",
 		description: "Browse a diverse range of courses and enroll in the ones that match your learning goals.",
 	},
 	{
 		id: 3,
-		icon: <PartyPopperIcon />,
+		icon: PartyPopperIcon,
 		name: "Start Learning",
 		description: "Dive into interactive lessons and hands-on exercises to master new skills with ease.",
 	}
@@ -56,30 +55,6 @@ export const GuestUser: GuestCredentialsTypes[] = [
 		}
 	}
 ]
-
-/* export const GuestBatch: NewUser[] = [
-	{
-		id: uuid(),
-		name: 'user',
-		email: 'user@gmail.com',
-		password: await bcrypt.hash('user123', 10),
-		role: 'user',
-	},
-	{
-		id: uuid(),
-		name: 'instructor',
-		email: 'instructor@gmail.com',
-		password: await bcrypt.hash('instructor123', 10),
-		role: 'instructor',
-	},
-	{
-		id: uuid(),
-		name: 'admin',
-		email: 'admin@gmail.com',
-		password: await bcrypt.hash('admin123', 10),
-		role: 'admin',
-	}
-];
 
 export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 	return [
@@ -221,4 +196,4 @@ export const LessonBatch = (sections: NewSection[]): NewLesson[] => {
 		}
 	];
 };
-*/
+

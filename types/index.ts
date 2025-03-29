@@ -1,3 +1,5 @@
+import { NewCourse, NewSection, NewLesson } from '@/drizzle/schema'
+
 export interface WorkingStepType {
 	id: number;
 	icon?: any;
@@ -27,4 +29,12 @@ export type GuestCredentialsTypes = {
 export type SessionPayloadTypes = {
 	userId: string | number;
 	expireAt: Date;
+}
+
+export interface SectionWithLesson extends NewSection {
+	lessons: NewLesson[];
+}
+
+export interface CourseWithSection extends NewCourse {
+	sections: SectionWithLesson[];
 }
