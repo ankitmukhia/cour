@@ -39,23 +39,22 @@ export const createSession = async (userId: string) => {
 		path: '/'
 	})
 
-	redirect('/dashboard')
+	redirect('/')
 }
 
 export const verifySession = async () => {
 	const cookieStore = await cookies()
 	const cookie = cookieStore.get('session')?.value
 
-	if (!cookie) return null
+	if (!cookie) {
+		redirect('/signin')
+	}
 
 	const session = await decrypt(cookie)
 
-	if (!session?.userId) {
-		redirect('/signin');
-	}
 
 	return {
-		isAuth: true, userId: String(session.userId)
+		isAuth: true, userId: String(session?.userId)
 	}
 }
 

@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { ArrowLeftIcon } from '@heroicons/react/24/solid'
-import { NewCourse } from '@/drizzle/schema'
+import { NewCourse, NewSection } from '@/drizzle/schema'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Image from 'next/image'
-import Link from 'next/link'
 
 export const Course = ({ course, enrollment }: { course: NewCourse, enrollment: boolean }) => {
 	const [enrollingState, setEnrollingState] = useState<boolean>(false)
@@ -81,9 +80,16 @@ export const Course = ({ course, enrollment }: { course: NewCourse, enrollment: 
 			</div>
 
 			<div className="p-2">
-				<h1 className="text-xl">Content Preview</h1>
-				
-				
+				<h1 className="text-2xl text-orange-500">Content Preview</h1>
+
+				<div className="mt-4 space-y-4">
+					{course.sections.map((section) => {
+						return (
+						<div key={section.id} className="py-3 border-b border-zinc-500/20">
+							<h1>{section.title}</h1>
+						</div>
+					)})}
+				</div>
 			</div>
 		</div>
 	)

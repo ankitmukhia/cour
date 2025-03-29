@@ -1,7 +1,8 @@
-import { courses, NewCourse, enrollments } from '@/drizzle/schema'
+import { courses, NewCourse, enrollments, section } from '@/drizzle/schema'
 import { verifySession } from '@/app/(register)/session/session'
-import { eq, and, count } from 'drizzle-orm'
+import { eq, and, count, sql } from 'drizzle-orm'
 import { db } from '@/drizzle/db'
+import { notFound } from 'next/navigation'
 import { Course } from './Course'
 
 interface Props {
@@ -23,8 +24,18 @@ export default async function CoursePage({ params }: Props) {
 	const courseId = (await params).courseId;
 	const session = await verifySession()
 
-	if(!session) return
+	if (!session) (
+		notFound()
+	)
 
+	/* [
+		{ section: 1 }	
+		{ section: 2 }	
+		{ section: 3 }
+		...
+	] */
+
+	/* groupBy groups all the realted table like enro... and sect... into one row */
 	const course = await db.select({
 		id: courses.id,
 		title: courses.title,
@@ -34,14 +45,23 @@ export default async function CoursePage({ params }: Props) {
 		published: courses.published,
 		createdAt: courses.createdAt,
 		enrollmentCount: count(enrollments.id).as("enrollmentCount"),
+		sections: sql`json_agg(
+      json_build_object(
+        'id', ${section.id},
+        'title', ${section.title},
+        'createdAt', ${section.createdAt}
+      )
+    )`.as('sections'),
 	}).from(courses)
 		.where(eq(courses.id, courseId))
 		.leftJoin(enrollments, eq(enrollments.courseId, courses.id))
-		.groupBy(courses.id, enrollments.userId)
+		.leftJoin(section, eq(section.courseId, courses.id))
+		.groupBy(courses.id)
 		.then(rows => rows[0]) as NewCourse
 
 	// check enrollment
-	const enrollment = await checkEnrollment(session.userId, courseId)
+	const enrollment = await checkEnrollment(session?.userId, courseId)
+	console.log(course)
 
 	return <Course enrollment={enrollment} course={course} />
 }

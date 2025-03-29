@@ -1,4 +1,4 @@
-import { WorkingStepType } from '@/types/index'
+import { WorkingStepType, GuestCredentialsTypes } from '@/types/index'
 import { CursorClickIcon } from '@/components/ui/cursorclick-icon'
 import { PartyPopperIcon } from '@/components/ui/partypopper-icon'
 import { WorkflowIcon } from '@/components/ui/workflow-icon'
@@ -27,9 +27,39 @@ export const WorkingStep: WorkingStepType[] = [
 	}
 ];
 
-export const GuestBatch: NewUser[] = [
+export const GuestUser: GuestCredentialsTypes[] = [
 	{
-		id: uuid(), 
+		id: 1,
+		title: "User guest Register.",
+		credentials: {
+			name: 'user',
+			email: 'user@gmail.com',
+			password: 'user123',
+		}
+	},
+	{
+		id: 2,
+		title: "Instructor guest Register.",
+		credentials: {
+			name: 'instructor',
+			email: 'instructor@gmail.com',
+			password: 'instructor123',
+		}
+	},
+	{
+		id: 3,
+		title: "Admin guest Register.",
+		credentials: {
+			name: 'admin',
+			email: 'admin@gmail.com',
+			password: 'admin123',
+		}
+	}
+]
+
+/* export const GuestBatch: NewUser[] = [
+	{
+		id: uuid(),
 		name: 'user',
 		email: 'user@gmail.com',
 		password: await bcrypt.hash('user123', 10),
@@ -191,4 +221,4 @@ export const LessonBatch = (sections: NewSection[]): NewLesson[] => {
 		}
 	];
 };
-
+*/
