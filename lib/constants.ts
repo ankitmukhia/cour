@@ -72,7 +72,7 @@ export const CourseBatch = (instructor: NewUser): NewCourse[] => {
 			title: "Full-Stack JavaScript",
 			description: "Learn how to build full-stack applications using Node.js, Express, and MongoDB.",
 			price: 99.99,
-			imageUrl: "https://images.unsplash.com/photo-1526374870839-e155464bb9df",
+			imageUrl: "https://images.unsplash.com/photo-1543966888-7c1dc482a810?q=80&w=2106&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
 			published: true,
 			instructorId: instructor.id
 		},
@@ -197,3 +197,62 @@ export const LessonBatch = (sections: NewSection[]): NewLesson[] => {
 	];
 };
 
+interface Lesson {
+	id: string;
+	title: string;
+	duration: string; // Example: "10 min"
+}
+
+export interface Section {
+	id: string;
+	title: string;
+	description: string;
+	lessons: Lesson[];
+}
+
+export const CourseSections: Section[] = [
+	{
+		id: "html",
+		title: "HTML Basics",
+		description: "Learn the foundation of web development with HTML.",
+		lessons: [
+			{ id: "html-1", title: "Introduction to HTML", duration: "5 min" },
+			{ id: "html-2", title: "HTML Elements & Structure", duration: "8 min" },
+			{ id: "html-3", title: "Forms & Inputs", duration: "10 min" },
+			{ id: "html-4", title: "Semantic HTML", duration: "7 min" },
+		],
+	},
+	{
+		id: "css",
+		title: "CSS Fundamentals",
+		description: "Style your web pages with CSS techniques.",
+		lessons: [
+			{ id: "css-1", title: "CSS Selectors & Properties", duration: "6 min" },
+			{ id: "css-2", title: "Box Model & Flexbox", duration: "10 min" },
+			{ id: "css-3", title: "Grid Layout", duration: "9 min" },
+			{ id: "css-4", title: "CSS Animations", duration: "7 min" },
+		],
+	},
+	{
+		id: "javascript",
+		title: "JavaScript Essentials",
+		description: "Learn JavaScript fundamentals for interactive web pages.",
+		lessons: [
+			{ id: "js-1", title: "Variables & Data Types", duration: "7 min" },
+			{ id: "js-2", title: "Functions & Scope", duration: "8 min" },
+			{ id: "js-3", title: "DOM Manipulation", duration: "10 min" },
+			{ id: "js-4", title: "ES6+ Features", duration: "9 min" },
+		],
+	},
+	{
+		id: "react",
+		title: "React for Beginners",
+		description: "Build dynamic web applications using React.",
+		lessons: [
+			{ id: "react-1", title: "JSX & Components", duration: "10 min" },
+			{ id: "react-2", title: "Props & State", duration: "12 min" },
+			{ id: "react-3", title: "React Hooks", duration: "15 min" },
+			{ id: "react-4", title: "React Router", duration: "10 min" },
+		],
+	},
+];

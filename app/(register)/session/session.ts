@@ -28,7 +28,7 @@ const decrypt = async (session: string) => {
 }
 
 export const createSession = async (userId: string) => {
-	const expireAt = new Date(Date.now() * 60 * 60 * 1000)
+	const expireAt = new Date(Date.now() + 60 * 60 * 1000)
 	const session = await encrypt({ userId, expireAt })
 	const cookieStore = await cookies()
 
@@ -51,7 +51,6 @@ export const verifySession = async () => {
 	}
 
 	const session = await decrypt(cookie)
-
 
 	return {
 		isAuth: true, userId: String(session?.userId)

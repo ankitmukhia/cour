@@ -30,6 +30,7 @@ export default async function CoursePage({ params }: Props) {
 	)
 
 	/* groupBy groups all the realted table like enro... and sect... into one row */
+	/* db.$count() this is subquery */
 	const course = await db.select({
 		id: courses.id,
 		title: courses.title,
@@ -38,7 +39,7 @@ export default async function CoursePage({ params }: Props) {
 		imageUrl: courses.imageUrl,
 		published: courses.published,
 		createdAt: courses.createdAt,
-		enrollmentCount: count(enrollments.id).as("enrollmentCount"),
+		enrollmentCount: db.$count(enrollments, eq(enrollments.courseId, courses.id)),
 		sections: sql`json_agg(
       json_build_object(
         'id', ${section.id},
@@ -59,11 +60,10 @@ export default async function CoursePage({ params }: Props) {
     )`.as('sections'),
 	}).from(courses)
 		.where(eq(courses.id, courseId))
-		.leftJoin(enrollments, eq(enrollments.courseId, courses.id))
+		.groupBy(courses.id)
 		.leftJoin(section, eq(section.courseId, courses.id))
-		.groupBy(courses.id, section.id)
 		.then(rows => rows[0]) as CourseWithSection
-		console.log("course dddd: ", course)
+	console.log("course dddd: ", course)
 
 	/* 
 	 We can do this as well sort and readable.

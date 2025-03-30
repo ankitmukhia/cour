@@ -1,11 +1,12 @@
-import { Logo } from '@/components/ui/logo'
 import { HoverButton, Slider } from '@/components/ui/hover-button'
 import { verifySession } from '@/app/(register)/session/session'
+import { courses, users, NewCourse } from '@/drizzle/schema'
+import { Container } from '@/components/ui/container'
 import { WorkingStep } from '@/lib/constants'
 import { WorkingStepType } from '@/types/index'
+import { Logo } from '@/components/ui/logo'
 import { db } from '@/drizzle/db'
-import { courses, users, enrollments, NewCourse } from '@/drizzle/schema'
-import { eq, count } from 'drizzle-orm'
+import { eq } from 'drizzle-orm'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -24,16 +25,14 @@ export default async function Home() {
 			instructor: {
 				name: users.name
 			},
-			enrollmentCount: count(enrollments.id).as("enrollmentCount"), // Count enrollments
 		}).from(courses)
 		.where(eq(courses.published, true))
 		.leftJoin(users, eq(courses.instructorId, users.id))
-		.leftJoin(enrollments, eq(enrollments.courseId, courses.id))
 		.groupBy(courses.id, users.name) // every non-aggregated field in the "select" must appear in the "groupBy clause"
 		.limit(6) as NewCourse[]
 
 	return (
-		<>
+		<Container>
 			<div className="flex items-center justify-between">
 				<Logo className="text-[2.5rem]" />
 				<div className="flex items-center gap-4">
@@ -126,7 +125,6 @@ export default async function Home() {
 					</div>
 				</div>
 			</div>
-
-		</>
+		</Container>
 	)
 }

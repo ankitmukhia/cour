@@ -44,7 +44,7 @@ export default function RootLayout({
 			<body
 				className={clsx(`font-vt323 antialiased`, bytesized.variable, geist.variable, vt323.variable, oswald.variable)}
 			>
-				<main className="container mb-12 max-w-3xl mx-auto px-2">
+				<main>
 					<Toaster position="top-center" />
 					{children}
 				</main>
