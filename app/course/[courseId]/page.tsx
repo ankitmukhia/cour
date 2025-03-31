@@ -63,6 +63,7 @@ export default async function CoursePage({ params }: Props) {
 		.groupBy(courses.id)
 		.leftJoin(section, eq(section.courseId, courses.id))
 		.then(rows => rows[0]) as CourseWithSection
+
 	console.log("course dddd: ", course)
 
 	/* 
