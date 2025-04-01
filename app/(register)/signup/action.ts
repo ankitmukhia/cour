@@ -7,6 +7,12 @@ import bcrypt from 'bcrypt'
 import { eq } from 'drizzle-orm'
 import { db } from '@/drizzle/db'
 
+enum Props {
+	user,
+	instructor,
+	admin
+}
+
 export async function signup(state: any, formData: FormData) {
 	// 1. Validate fields
 	const { success, error, data } = SignupSchema.safeParse({
@@ -38,21 +44,25 @@ export async function signup(state: any, formData: FormData) {
 	const hashedPassword = await bcrypt.hash(password, 10)
 
 	//2. Create user
-	const user = await db.insert(users).values({
+	const createUser = await db.insert(users).values({
 		name,
 		email,
 		password: hashedPassword
-	}).returning({ id: users.id })
+	}).returning({ id: users.id, role: users.role })
+		.then(user => user[0])
 
-	if (!user) {
+	if (!createUser) {
 		return {
 			message: "An error while creating your account."
 		}
 	}
 
-	const userId = user[0].id.toString()
+	const user = {
+		userId: createUser.id.toString(),
+		role: createUser.role
+	}
 
-	await createSession(userId)
+	await createSession(user)
 }
 
 export async function logout() {

@@ -28,6 +28,7 @@ export type GuestCredentialsTypes = {
 
 export type SessionPayloadTypes = {
 	userId: string | number;
+	role: any;
 	expireAt: Date;
 }
 

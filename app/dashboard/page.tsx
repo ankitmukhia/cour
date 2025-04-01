@@ -53,28 +53,36 @@ export default async function DashboardPage() {
 
 	return (
 		<Container className="mt-6">
-			<Appbar />
+			<Appbar role={session.role} />
 
-			<div className="mt-7 grid grid-cols-1 md:grid-cols-3 gap-4">
-				{enrolledCourses.map(course => (
-					<Link
-						key={course.id}
-						href={`/learn/${course.id}/${course.sections[0].lessons[0].id}`}
-						className="border border-zinc-100/10 p-2 space-y-2 rounded-xl hover-animation hover:shadow-orange-400 hover:shadow-sm"
-					>
-						<div className="relative w-full h-40">
-							<Image
-								src={course.imageUrl ?? ""}
-								alt="image"
-								fill
-								className="object-cover rounded-md"
-							/>
-						</div>
-						<h1 className="text-xl">{course.title}</h1>
-						<h1 className="text-zinc-200/60">{course.description}</h1>
-					</Link>
-				))}
-			</div>
+			{session.role === "user" && (
+				<div className="mt-7 grid grid-cols-1 md:grid-cols-3 gap-4">
+					{enrolledCourses.map(course => (
+						<Link
+							key={course.id}
+							href={`/learn/${course.id}/${course.sections[0].lessons[0].id}`}
+							className="border border-zinc-100/10 p-2 space-y-2 rounded-xl hover-animation hover:shadow-orange-400 hover:shadow-sm"
+						>
+							<div className="relative w-full h-40">
+								<Image
+									src={course.imageUrl ?? ""}
+									alt="image"
+									fill
+									className="object-cover rounded-md"
+								/>
+							</div>
+							<h1 className="text-xl">{course.title}</h1>
+							<h1 className="text-zinc-200/60">{course.description}</h1>
+						</Link>
+					))}
+				</div>
+			)}
+
+			{session.role === "instructor" && (
+				<div className="mt-7 grid grid-cols-1 md:grid-cols-3 gap-4">
+					All instructor course.
+				</div>
+			)}
 		</Container>
 	)
 }

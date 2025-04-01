@@ -23,6 +23,9 @@
 	.hover-animation {
 		@apply transform transition-all duration-300 ease-in-out md:hover:scale-105;
 	}
+	.hover-underline{
+		@apply hover:underline underline-offset-4 decoration-orange-500;
+	}
 }
 
 body {

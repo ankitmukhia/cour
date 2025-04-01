@@ -2,7 +2,7 @@
 
 import { LoginSchema } from '@/lib/definitions'
 import { createSession } from '../session/session'
-import {} from '../session/session'
+import { } from '../session/session'
 import { db } from '@/drizzle/db'
 import { users } from '@/drizzle/schema'
 import { eq } from 'drizzle-orm'
@@ -24,24 +24,27 @@ export async function signin(state: any, formData: FormData) {
 
 	const { email, password } = data;
 
-	const user = await db.query.users.findFirst({
+	const verifyUser = await db.query.users.findFirst({
 		where: eq(users.email, email)
 	})
 
-	if (!user) {
-		return errorMessage 
+	if (!verifyUser) {
+		return errorMessage
 	}
 
 	const comparePassword = await bcrypt.compare(
 		password,
-		user.password
-	) 
+		verifyUser.password
+	)
 
 	if(!comparePassword) {
-		return errorMessage 
+		return errorMessage
 	}
 
-	const userId = user.id.toString()
+	const user = {
+		userId: verifyUser.id.toString(),
+		role: verifyUser.role
+	}
 
-	await createSession(userId)
+	await createSession(user)
 }

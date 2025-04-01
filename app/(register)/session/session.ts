@@ -1,9 +1,15 @@
 import 'server-only'
 
 import { SessionPayloadTypes } from '@/types'
+import { roleEnum } from '@/drizzle/schema'
 import { SignJWT, jwtVerify } from 'jose'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+
+interface SessionProps {
+	userId: string;
+	role: any;
+}
 
 const secretKey = process.env.SECRET;
 const key = new TextEncoder().encode(secretKey)
@@ -27,9 +33,9 @@ const decrypt = async (session: string) => {
 	}
 }
 
-export const createSession = async (userId: string) => {
+export const createSession = async ({ userId, role }: SessionProps) => {
 	const expireAt = new Date(Date.now() + 60 * 60 * 1000)
-	const session = await encrypt({ userId, expireAt })
+	const session = await encrypt({ userId, role, expireAt })
 	const cookieStore = await cookies()
 
 	cookieStore.set('session', session, {
@@ -53,7 +59,7 @@ export const verifySession = async () => {
 	const session = await decrypt(cookie)
 
 	return {
-		isAuth: true, userId: String(session?.userId)
+		isAuth: true, role: session?.role, userId: String(session?.userId)
 	}
 }
 
