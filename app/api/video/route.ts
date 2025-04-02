@@ -1,1 +1,1 @@
-import { GET } from 'next-video/request-handler'
+export { GET } from 'next-video/request-handler';

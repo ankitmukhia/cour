@@ -15,7 +15,9 @@ export const CreateCourseSchema = z.object({
 	courseTitle: z.string().nonempty(),
 	courseDescription: z.string().nonempty(),
 	coursePrice: z.number(),
-	courseImageUrl: z.string().nonempty(),
+	courseImageUrl: z.instanceof(File)
+		.refine((file) => ["image/png", "image/jpeg"].includes(file.type), "Only PNG and JPEG files are allowed")
+		.refine((file) => file.size < 1 * 1024 * 1024, "File must be less then 1MB"),
 	sectionTitle: z.string().nonempty(),
 	lessonTitle: z.string().nonempty(),
 	lessonContent: z.string().nonempty(),

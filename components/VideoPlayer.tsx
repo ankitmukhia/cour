@@ -7,6 +7,7 @@ import NextVideo from 'next-video'
 // truns out I can sync it while uploading to db.
 
 export const VideoPlayer = (lesson: NewLesson) => {
+	console.log("lesson: ", lesson)
 	const isYoutubeUrl = (url: string) => {
 		const regex = /^https:\/\/www\.youtube\.com\/embed\/[a-zA-Z0-9_-]+/;
 		return regex.test(url);
