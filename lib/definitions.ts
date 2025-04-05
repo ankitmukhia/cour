@@ -11,7 +11,7 @@ export const LoginSchema = z.object({
 	password: z.string().nonempty(),
 })
 
-export const CreateCourseSchema = z.object({
+export const CreateNewCourseSchema = z.object({
 	courseTitle: z.string().nonempty(),
 	courseDescription: z.string().nonempty(),
 	coursePrice: z.number(),
@@ -22,4 +22,12 @@ export const CreateCourseSchema = z.object({
 	lessonTitle: z.string().nonempty(),
 	lessonContent: z.string().nonempty(),
 	videoUrl: z.string().nonempty(),
+})
+
+export const CreateSectionOnExistingCourseSchema = z.object({
+
+})
+
+export const CreateLessonOnExistingSectionSchema = z.object({
+
 })

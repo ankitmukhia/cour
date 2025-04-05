@@ -42,9 +42,25 @@ export default function CreatePage() {
 			</div>
 
 			<form action={action} className="space-y-2">
-				<Label>
-					Create Course
-				</Label>
+				<div className="flex items-center justify-between">
+					<Label>
+						Create Course
+					</Label>
+					<DropdownMenu>
+						<DropdownTrigger onClick={() => setIsCourseOpen(!isCourseOpen)} className="hover:bg-zinc-400/20 inline-block">
+							<div className="flex items-center gap-2">
+								<div className="h-3 w-3 bg-orange-500 rounded-full" />
+								Choose existing Course
+							</div>
+						</DropdownTrigger>
+						<DropdownContent isOpen={isCourseOpen}>
+							<div>Section 1</div>
+							<div>Section 2</div>
+							<div>Section 3</div>
+							<div>Section 4</div>
+						</DropdownContent>
+					</DropdownMenu>
+				</div>
 				<div className="flex mt-2 flex-col gap-2">
 					<Input name="courseTitle" placeholder="Course title" />
 					<Input name="courseDescription" placeholder="Course description" />
@@ -82,30 +98,6 @@ export default function CreatePage() {
 						Create Course Section
 					</Label>
 					<DropdownMenu>
-						<DropdownTrigger onClick={() => setIsCourseOpen(!isCourseOpen)} className="hover:bg-zinc-400/20 inline-block">
-							<div className="flex items-center gap-2">
-								<div className="h-3 w-3 bg-orange-500 rounded-full" />
-								Choose existing Course
-							</div>
-						</DropdownTrigger>
-						<DropdownContent isOpen={isCourseOpen}>
-							<div>Section 1</div>
-							<div>Section 2</div>
-							<div>Section 3</div>
-							<div>Section 4</div>
-						</DropdownContent>
-					</DropdownMenu>
-				</div>
-
-				<div className="flex mt-2 flex-col gap-2">
-					<Input name="sectionTitle" placeholder="Section title" />
-				</div>
-
-				<div className="flex items-center justify-between">
-					<Label>
-						Create Section Lesson
-					</Label>
-					<DropdownMenu>
 						<DropdownTrigger onClick={() => setIsSectionOpen(!isSectionOpen)} className="hover:bg-zinc-400/20 inline-block">
 							<div className="flex items-center gap-2">
 								<div className="h-3 w-3 bg-orange-500 rounded-full" />
@@ -120,6 +112,14 @@ export default function CreatePage() {
 						</DropdownContent>
 					</DropdownMenu>
 				</div>
+
+				<div className="flex mt-2 flex-col gap-2">
+					<Input name="sectionTitle" placeholder="Section title" />
+				</div>
+
+				<Label>
+					Create Section Lesson
+				</Label>
 				<div className="flex mt-2 flex-col gap-2">
 					<Input name="lessonTitle" placeholder="Lesson title" />
 					<Input name="lessonContent" placeholder="Lesson content" />
